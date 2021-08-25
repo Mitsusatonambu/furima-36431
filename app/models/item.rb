@@ -3,6 +3,7 @@ class Item < ApplicationRecord
   has_one_attached :image
 
   validates :name, :info, :price, presence: true
+  validates :price, numericality: {in: 333..9999999}
   validates :category_id, :delivery_date_id, :delivery_fee_id, :prefecture_id, :status_id, numericality: { other_than: 1 , message: "can't be blank"}
 
   extend Activehash::Associations::ActiveRecordExtensions
