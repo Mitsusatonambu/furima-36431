@@ -11,6 +11,11 @@ RSpec.describe Item, type: :model do
   end
 
   describe "商品入力失敗" do
+    it "userが紐ついてなければ出品できない" do
+      @item.user = nil
+      @item.valid?
+      expect(@item.errors.full_messages).to include("User must exist")
+    end
     it "imageが選択されてないと失敗する" do
        @item.image = nil
        @item.valid?
@@ -56,20 +61,40 @@ RSpec.describe Item, type: :model do
       @item.valid?
       expect(@item.errors.full_messages).to include("Price can't be blank") 
     end
-    it "priceが英数字でないため失敗" do 
+    it "priceが全角ひらがなであるため失敗" do 
       @item.price = 'あいうえお'
       @item.valid?
       expect(@item.errors.full_messages).to include("Price is not a number") 
     end
-    it "priceの範囲が¥300~¥9999999でないため失敗" do 
-      @item.price = 99   
+    it "priceの範囲が¥300未満のため失敗" do 
+      @item.price = 200  
       @item.valid?
       expect(@item.errors.full_messages).to include("Price must be greater than or equal to 333")
     end
-    it "priceの範囲が¥300~¥9999999でないため失敗" do 
-      @item.price = 10000000
+    it "priceの範囲が¥9999999より大きいため失敗" do 
+      @item.price = 88888888
       @item.valid?
       expect(@item.errors.full_messages).to include("Price must be less than or equal to 9999999")
+    end
+    it "priceが小数点以下の数字があるため失敗" do 
+      @item.price = 888.99
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Price must be an integer")
+    end
+    it "priceが全角数字であるため失敗" do 
+      @item.price = "９９９"
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Price is not a number")
+    end
+    it "priceが半角英数字混合であるため失敗" do 
+      @item.price = "n3m4m5"
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Price is not a number")
+    end
+    it "priceが半角英語であるため失敗" do 
+      @item.price = "huhuhu"
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Price is not a number")
     end
   end
 end
