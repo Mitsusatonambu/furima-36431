@@ -43,6 +43,7 @@ has_many :orders
 ### Association
 belongs_to :user
 has_one :order
+has_one :address
 
 
 
@@ -71,11 +72,10 @@ has_one :address
 |city             |string           |null :false                              |
 |house_number     |string           |null :false                              |
 |building         |string           |                                         |
-|order            |references       |null :false foreign_key :true            |
+|order            |references       |null :false ,foreign_key :true           |
 |phone_number     |string           |null :false                              |
 |prefecture_id    |integer          |null :false                              |
-|                 |                 |                                         |
-|                 |                 |                                         |
+|item             |references       |null :false ,foreign_key :true           |    |                 |                 |                                         |
 |                 |                 |                                         |
 |                 |                 |                                         |
 |-----------------|-----------------|-----------------------------------------|
@@ -83,3 +83,4 @@ has_one :address
 
 ### Association
 belongs_to :order
+belongs_to :item
